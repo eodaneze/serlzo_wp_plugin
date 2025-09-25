@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <div id="sidebars">
+    <!-- <div id="sidebars">
         <div class="dashboard-logo">
             <img src="./assets/image/logo.png" alt="">
         </div>
@@ -80,11 +80,11 @@
                         </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <section class="all-dashbaord">
         <div class="dashboard-content">
-            <div class="dashboard-left">
+            <!-- <div class="dashboard-left">
                 <div class="dashboard-logo">
                     <img src="./assets/image/logo.png" alt="">
                 </div>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="dashboard-right">
                 <div class="dashboard-navbar">
                     
