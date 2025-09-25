@@ -1,0 +1,22 @@
+name: Deploy to Hostinger
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Rsync to Hostinger
+        uses: burnett01/rsync-deployments@v7
+        with:
+          switches: -avz --delete
+          path: .
+          remote_path: /home/u767822519/domains/eazeehub.com/public_html/serlzo/wp-content/plugins/serlzo
+          remote_host: 145.14.152.127
+          remote_user: u767822519
+          remote_key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          remote_port: 65002
