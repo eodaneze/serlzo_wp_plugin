@@ -1,23 +1,24 @@
-name: Deploy WordPress Plugin
+name: Publish Serlzo Plugin
 
 on:
   push:
     branches:
-      - main  # deploy when pushing to main branch
+      - main   # deploy whenever you push to main
 
 jobs:
-  deploy:
+  web-deploy:
+    name: 🚀 Deploy Serlzo WP Plugin
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: 📥 Get Latest Code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.1
+      - name: 📂 Sync Files to Hostinger
+        uses: SamKirkland/web-deploy@v1
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy via rsync
-        run: |
-          rsync -avz --delete ./ ${SSH_USER}@${SSH_HOST}:/home/${SSH_USER}/public_html/wp-content/plugins/serlzo/ -e "ssh -p ${SSH_PORT}"
+          target-server: serlzo.zecconsultin.com        
+          remote-user: u767822519                       
+          port: 65002                                 
+          private-ssh-key: ${{ secrets.SSH_KEY }}      
+          destination-path: /home/u767822519/domains/serlzo.zecconsultin.com/public_html/wp-content/plugins/serlzo/
+          
