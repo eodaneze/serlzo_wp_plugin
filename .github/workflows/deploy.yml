@@ -1,23 +1,23 @@
-name: Deploy to Hostinger
+name: Deploy WordPress Plugin
 
 on:
   push:
     branches:
-      - main  
+      - main  # deploy when pushing to main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Deploy to Hostinger
-        uses: appleboy/ssh-action@v0.1.6
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
         with:
-          host: 145.14.152.127
-          username: u767822519
-          key: ${{ secrets.HOSTINGER_KEY }}
-          port: 65002
-          script: |
-            cd /home/u767822519/domains/eazeehub.com/public_html/serlzo/wp-content/plugins/serlzo
-            git pull origin main
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete ./ ${SSH_USER}@${SSH_HOST}:/home/${SSH_USER}/public_html/wp-content/plugins/serlzo/ -e "ssh -p ${SSH_PORT}"
