@@ -67,6 +67,19 @@ function serizo_enqueue_assets( $hook ) {
 add_action( 'admin_enqueue_scripts', 'serizo_enqueue_assets' );
 
 
+
+
 function serizo_render_admin_page() {
     include plugin_dir_path( __FILE__ ) . 'admin-page.php';
 }
+
+require plugin_dir_path(__FILE__) . 'plugin-update-checker/plugin-update-checker.php';
+
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$updateChecker = PucFactory::buildUpdateChecker(
+    'https://serlzo.zecconsultin.com/serlzo-wp.json', // manifest URL
+    __FILE__,
+    'serlzo'
+);
+
