@@ -2,7 +2,7 @@
 
 PLUGIN_NAME="serlzo"
 VERSION="1.0.0"
-REMOTE_HOST="serlzo.zecconsultin.com"
+REMOTE_HOST="serlzo.spellahub.com"
 REMOTE_PATH="/downloads"
 
 ZIP_FILE="downloads/${PLUGIN_NAME}${VERSION}.zip"
