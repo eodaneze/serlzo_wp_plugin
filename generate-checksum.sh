@@ -1,7 +1,7 @@
 #!/bin/bash
 # Config
 PLUGIN_NAME="serlzo"
-VERSION="1.0"
+VERSION="1.1"
 REMOTE_HOST="serlzo.spellahub.com"
 REMOTE_PATH="/downloads"
 
