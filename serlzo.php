@@ -78,7 +78,7 @@ require plugin_dir_path(__FILE__) . 'plugin-update-checker/plugin-update-checker
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $updateChecker = PucFactory::buildUpdateChecker(
-    'https://serlzo.zecconsultin.com/serlzo-wp.json', // manifest URL
+    'https://serlzo.spellahub.com/serlzo-wp.json', // manifest URL
     __FILE__,
     'serlzo'
 );
