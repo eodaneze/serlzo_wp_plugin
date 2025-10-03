@@ -3,7 +3,7 @@
  * Plugin Name: Serizo Dashboard
  * Description: Displays the Serizo HTML/CSS dashboard inside WordPress admin.
  * Version: 1.0
- * Author: Your Name
+ * Author: Daniel Ezeali
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
