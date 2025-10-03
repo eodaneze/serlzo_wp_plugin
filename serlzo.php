@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Serizo Dashboard
- * Description: Displays the Serizo HTML/CSS dashboard inside WordPress admin.
+ * Description: Custom WordPress plugin for Serlzo Dashboard.
  * Version: 1.0
  * Author: Daniel Ezeali
  */

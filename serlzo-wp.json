@@ -1,11 +1,21 @@
 {
-  "version": "1.0.0",
-  "download_url": "https://serlzo.spellahub.com/downloads/serlzo1.0.zip",
-  "download_checksum": "sha256:PLACEHOLDER",
+  "name": "Serlzo Dashboard",
+  "slug": "serlzo",
+  "version": "1.0",
+  "author": "Daniel Ezeali",
+  "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.0.zip",
+  "download_checksum": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "requires": "6.0",
   "tested": "6.5",
   "sections": {
-    "changelog": "<h4>1.0.0</h4><ul><li>First stable release</li></ul>",
-    "description": "<h4>Serlzo</h4><p>Serizo Dashboard inside WordPress admin.</p>"
+    "description": "<h4>Serlzo Dashboard</h4><p>Displays the Serlzo HTML/CSS dashboard inside WP admin.</p>",
+    "changelog": "<h4>1.1.0</h4><ul><li>Fixed security bug</li><li>Improved dashboard UI</li></ul>"
+  },
+  "branches": {
+    "stable": {
+      "version": "1.0",
+      "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.0.zip",
+      "download_checksum": "sha256:[PASTE_1.0_CHECKSUM]"
+    }
   }
 }
