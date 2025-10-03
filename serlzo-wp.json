@@ -4,7 +4,7 @@
   "version": "1.1",
   "author": "Daniel Ezeali",
   "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.1.zip",
-  "download_checksum": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "download_checksum": "sha256:7f7a973c277e9b97e27d846c0fe28603b67a1924080a20e6ec24a2773b8135a7",
   "requires": "6.0",
   "tested": "6.5",
   "sections": {
@@ -15,7 +15,7 @@
     "stable": {
       "version": "1.1",
       "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.1.zip",
-      "download_checksum": "sha256:[PASTE_1.0_CHECKSUM]"
+      "download_checksum": "sha256:7f7a973c277e9b97e27d846c0fe28603b67a1924080a20e6ec24a2773b8135a7"
     }
   }
 }
