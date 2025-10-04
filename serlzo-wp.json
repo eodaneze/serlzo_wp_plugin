@@ -1,21 +1,11 @@
 {
-  "name": "Serlzo Dashboard",
-  "slug": "serlzo",
-  "version": "1.1",
-  "author": "Daniel Ezeali",
-  "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.1.zip",
-  "download_checksum": "sha256:7f7a973c277e9b97e27d846c0fe28603b67a1924080a20e6ec24a2773b8135a7",
+  "version": "1.2",
+  "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.2.zip",
+  "download_checksum": "sha256:8105ab38cc35c27fdf6961a58a7a60b9a6b0e9476aee90ae739763160f81d656",
   "requires": "6.0",
   "tested": "6.5",
   "sections": {
-    "description": "<h4>Serlzo Dashboard</h4><p>Displays the Serlzo HTML/CSS dashboard inside WP admin.</p>",
-    "changelog": "<h4>1.1</h4><ul><li>Fixed security bug</li><li>Improved dashboard UI</li></ul>"
-  },
-  "branches": {
-    "stable": {
-      "version": "1.1",
-      "download_url": "https://serlzo.spellahub.com/downloads/serlzo-1.1.zip",
-      "download_checksum": "sha256:7f7a973c277e9b97e27d846c0fe28603b67a1924080a20e6ec24a2773b8135a7"
-    }
+    "changelog": "<h4>1.2</h4><ul><li>Bug fixes</li><li>Improvements</li></ul>",
+    "description": "<h4>Serlzo Dashboard</h4><p>Displays the Serlzo HTML/CSS dashboard inside WP admin.</p>"
   }
 }

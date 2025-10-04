@@ -1,48 +1,90 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
-:: Read current version from serlzo.php (line with "Version:")
-for /f "tokens=2 delims=:" %%i in ('findstr /i "Version:" serlzo.php') do set current=%%i
-set current=%current: =%
+:: ==========================
+:: CONFIGURATION
+:: ==========================
+set PLUGIN_NAME=serlzo
+set REMOTE_HOST=145.14.152.127
+set REMOTE_USER=u767822519.spellahub.com
+set REMOTE_PASS=EOdan23#
+set REMOTE_PATH=/serlzo/downloads
+set JSON_FILE=serlzo-wp.json
+set DOWNLOAD_URL=https://serlzo.spellahub.com/downloads
 
-:: Strip non-numeric/period chars
-for /f "tokens=* delims= " %%i in ("%current%") do set current=%%i
+:: ==========================
+:: ASK VERSION
+:: ==========================
+set /p VERSION=Enter new version (e.g. 1.1): 
 
-echo Current version: %current%
-set /p version=Enter new version (Press Enter to auto-increment): 
-
-:: Auto-increment patch version if user pressed Enter
-if "%version%"=="" (
-    for /f "tokens=1,2 delims=." %%a in ("%current%") do (
-        set major=%%a
-        set minor=%%b
-    )
-    if "%minor%"=="" set minor=0
-    set /a minor+=1
-    set version=%major%.%minor%
-)
-
-echo New version: %version%
-
-:: Update serlzo.php version line (only replace the Version: line)
-powershell -Command "(Get-Content serlzo.php) -replace 'Version:\s*[0-9\.]+', 'Version: %version%' | Set-Content serlzo.php"
-
-:: Create downloads folder if not exists
+:: ==========================
+:: PREPARE DIRECTORIES
+:: ==========================
 if not exist downloads mkdir downloads
 
-:: Create zip file
-echo Creating zip: serlzo-%version%.zip
-powershell -Command "Compress-Archive -Path * -DestinationPath downloads\serlzo-%version%.zip -Force"
+set ZIPFILE=%PLUGIN_NAME%-%VERSION%.zip
+set ZIPPATH=downloads\%ZIPFILE%
 
-:: Generate checksum
+:: ==========================
+:: UPDATE serlzo.php VERSION
+:: ==========================
+echo Updating version in serlzo.php to %VERSION% ...
+powershell -Command "(Get-Content serlzo.php) -replace 'Version: .*', 'Version: %VERSION%' | Set-Content serlzo.php"
+
+:: ==========================
+:: CREATE ZIP
+:: ==========================
+echo Creating zip: %ZIPFILE% ...
+if exist "%ZIPPATH%" (
+  echo Deleting old zip...
+  del /f /q "%ZIPPATH%"
+)
+
+powershell -Command "if(Test-Path '%ZIPPATH%'){Remove-Item '%ZIPPATH%' -Force}; Compress-Archive -Path * -DestinationPath '%ZIPPATH%' -Force"
+
+:: ==========================
+:: GENERATE CHECKSUM
+:: ==========================
 echo Generating checksum...
-for /f "tokens=1,2" %%i in ('certutil -hashfile downloads\serlzo-%version%.zip SHA256 ^| find /i /v "SHA256" ^| find /i /v "certutil"') do set checksum=%%i
+for /f "tokens=1,*" %%a in ('CertUtil -hashfile "%ZIPPATH%" SHA256 ^| findstr /v "hash"') do set CHECKSUM=%%a
 
-echo SHA256: %checksum%
+echo SHA256: %CHECKSUM%
 
-:: Update serlzo-wp.json with new version and checksum
-powershell -Command "(Get-Content serlzo-wp.json) -replace '\"version\":\s*\"[0-9\.]+\"', '\"version\": \"%version%\"' -replace '\"download_checksum\":\s*\"sha256:[a-fA-F0-9]+\"', '\"download_checksum\": \"sha256:%checksum%\"' -replace '\"version\":\s*\"[0-9\.]+\"', '\"version\": \"%version%\"' | Set-Content serlzo-wp.json"
+:: ==========================
+:: UPDATE JSON FILE
+:: ==========================
+echo Updating %JSON_FILE% ...
+
+(
+echo {
+echo   "version": "%VERSION%",
+echo   "download_url": "%DOWNLOAD_URL%/%ZIPFILE%",
+echo   "download_checksum": "sha256:%CHECKSUM%",
+echo   "requires": "6.0",
+echo   "tested": "6.5",
+echo   "sections": {
+echo     "changelog": "<h4>%VERSION%</h4><ul><li>Bug fixes</li><li>Improvements</li></ul>",
+echo     "description": "<h4>Serlzo Dashboard</h4><p>Displays the Serlzo HTML/CSS dashboard inside WP admin.</p>"
+echo   }
+echo }
+) > %JSON_FILE%
+
+:: ==========================
+:: UPLOAD TO HOSTINGER
+:: ==========================
+echo Uploading files to server...
+
+:: Upload ZIP
+curl -T "%ZIPPATH%" -u %REMOTE_USER%:%REMOTE_PASS% ftp://%REMOTE_HOST%%REMOTE_PATH%/%ZIPFILE%
+
+:: Upload JSON
+curl -T "%JSON_FILE%" -u %REMOTE_USER%:%REMOTE_PASS% ftp://%REMOTE_HOST%/serlzo/%JSON_FILE%
 
 echo.
-echo ✅ Done! Please upload downloads\serlzo-%version%.zip and serlzo-wp.json to your server.
+echo ===========================================
+echo Done! Version %VERSION% released.
+echo Zip File: %DOWNLOAD_URL%/%ZIPFILE%
+echo Manifest: https://serlzo.spellahub.com/%JSON_FILE%
+echo ===========================================
+
 pause
