@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Serizo Dashboard
  * Description: Custom WordPress plugin for Serlzo Dashboard.
- * Version: 1.0
+ * Version: 1.1
  * Author: Daniel Ezeali
  */
 

@@ -1,34 +1,48 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
-:: Ask for new version
-set /p new_version=Enter new version (e.g. 1.1): 
+:: Read current version from serlzo.php (line with "Version:")
+for /f "tokens=2 delims=:" %%i in ('findstr /i "Version:" serlzo.php') do set current=%%i
+set current=%current: =%
 
-echo.
-echo === Updating serlzo.php version to %new_version% ===
+:: Strip non-numeric/period chars
+for /f "tokens=* delims= " %%i in ("%current%") do set current=%%i
 
-:: Update the "Version:" line inside serlzo.php
-powershell -Command "(Get-Content serlzo.php) -replace 'Version:\s*[0-9.]+', 'Version: %new_version%' | Set-Content serlzo.php"
+echo Current version: %current%
+set /p version=Enter new version (Press Enter to auto-increment): 
 
-echo.
-echo === Creating zip: serlzo-%new_version%.zip ===
+:: Auto-increment patch version if user pressed Enter
+if "%version%"=="" (
+    for /f "tokens=1,2 delims=." %%a in ("%current%") do (
+        set major=%%a
+        set minor=%%b
+    )
+    if "%minor%"=="" set minor=0
+    set /a minor+=1
+    set version=%major%.%minor%
+)
 
-:: Delete old zip if it exists
-if exist downloads\serlzo-%new_version%.zip del /f /q downloads\serlzo-%new_version%.zip
+echo New version: %version%
 
-:: Create new zip of everything in this folder
-powershell -Command "Compress-Archive -Path * -DestinationPath 'downloads/serlzo-%new_version%.zip' -Force"
+:: Update serlzo.php version line (only replace the Version: line)
+powershell -Command "(Get-Content serlzo.php) -replace 'Version:\s*[0-9\.]+', 'Version: %version%' | Set-Content serlzo.php"
 
-echo.
-echo === Generating checksum... ===
-for /f "tokens=1,*" %%a in ('certutil -hashfile downloads\serlzo-%new_version%.zip SHA256 ^| find /i /v "hash" ^| find /i /v "certutil"') do set checksum=%%a
+:: Create downloads folder if not exists
+if not exist downloads mkdir downloads
+
+:: Create zip file
+echo Creating zip: serlzo-%version%.zip
+powershell -Command "Compress-Archive -Path * -DestinationPath downloads\serlzo-%version%.zip -Force"
+
+:: Generate checksum
+echo Generating checksum...
+for /f "tokens=1,2" %%i in ('certutil -hashfile downloads\serlzo-%version%.zip SHA256 ^| find /i /v "SHA256" ^| find /i /v "certutil"') do set checksum=%%i
+
 echo SHA256: %checksum%
 
-echo.
-echo === Updating serlzo-wp.json ===
-powershell -Command "(Get-Content serlzo-wp.json) -replace '\"version\": \".*\"', '\"version\": \"%new_version%\"' -replace '\"download_url\": \".*\"', '\"download_url\": \"https://serlzo.spellahub.com/downloads/serlzo-%new_version%.zip\"' -replace '\"download_checksum\": \".*\"', '\"download_checksum\": \"sha256:%checksum%\"' | Set-Content serlzo-wp.json"
+:: Update serlzo-wp.json with new version and checksum
+powershell -Command "(Get-Content serlzo-wp.json) -replace '\"version\":\s*\"[0-9\.]+\"', '\"version\": \"%version%\"' -replace '\"download_checksum\":\s*\"sha256:[a-fA-F0-9]+\"', '\"download_checksum\": \"sha256:%checksum%\"' -replace '\"version\":\s*\"[0-9\.]+\"', '\"version\": \"%version%\"' | Set-Content serlzo-wp.json"
 
 echo.
-echo ✅ Done! Version bumped to %new_version%
-echo Upload downloads\serlzo-%new_version%.zip and serlzo-wp.json to your server.
+echo ✅ Done! Please upload downloads\serlzo-%version%.zip and serlzo-wp.json to your server.
 pause
